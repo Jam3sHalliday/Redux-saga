@@ -15,18 +15,13 @@ import * as taskActions from '../../actions/tasks'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import SearchBox from '../../components/SearchBox';
 
 class TaskBoard extends Component {
 
     state = {
         open: false
     };
-
-    // componentDidMount() {
-    //     const { taskActionCreator } = this.props;
-    //     const { fetchListTask } = taskActionCreator;
-    //     fetchListTask();
-    // };
 
     renderBoard = () => {
         const { listTask } = this.props;
@@ -47,7 +42,7 @@ class TaskBoard extends Component {
             </Grid>
         );
         return xhtml;
-    }
+    };
 
     handleClose = () => {
         this.setState({
@@ -59,7 +54,7 @@ class TaskBoard extends Component {
         this.setState({
             open: true
         });
-    }
+    };
 
     renderForm = () => {
         const { open } = this.state;
@@ -71,13 +66,30 @@ class TaskBoard extends Component {
         );
 
         return xhtml;
-    }
+    };
 
     loadData = () => {
         const { taskActionCreator } = this.props;
         const { fetchListTask } = taskActionCreator;
         fetchListTask();
-    }
+    };
+
+    handleFilter = e => {
+        const { value } = e.target;
+        const { taskActionCreator } = this.props;
+        const { filterTask } = taskActionCreator;
+        filterTask(value);
+    };
+
+    renderSearchBox = () => {
+        let html = null;
+
+        html = (
+            <SearchBox handleChange = { this.handleFilter } />
+        );
+
+        return html;
+    };
 
     render() {
         const { classes } = this.props;
@@ -96,7 +108,7 @@ class TaskBoard extends Component {
                 >
                     <AddIcon /> Load Data
                 </Button>
-                
+                { this.renderSearchBox() }
                 { this.renderBoard() }
                 { this.renderForm() }
             </div>
@@ -108,6 +120,7 @@ TaskBoard.propTypes = {
     classes: PropTypes.object,
     taskActionCreator: PropTypes.shape({
         fetchListTask: PropTypes.func,
+        filterTask: PropTypes.func,
     }),
     listTask: PropTypes.array
 }

@@ -23,23 +23,14 @@ export const fetchListTaskFailed = error => {
     };
 };
 
-/*
-    b1: fetchListTaskRequest()
-    b2: reset: state.tasks => []
-    b3: fetchListTaskSuccess(dataResponse)
-*/
+export const filterTask = keyword => ({
+    type: taskConstants.FILTER_TASK,
+    payload: {
+        keyword,
+    }
+});
 
-
-// export const fetchListTaskRequest = () => {
-//     return dispatch => {
-//         dispatch(fetchListTask())
-//         taskApis
-//             .getList()
-//             .then( res => {
-//                 const { data } = res;
-//                 dispatch(fetchListTaskSuccess(data));
-//             }).catch(err => {
-//                 dispatch(fetchListTaskFailed(err));
-//             });
-//     };
-// };
+export const filterTaskSuccess = data => ({
+    type: taskConstants.FILTER_TASK_SUCCESS,
+    payload: { data }
+});
