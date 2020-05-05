@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import styles from './styles';
 import Taskboard from '../Taskboard';
+import Modal from '../../components/Modal';
 import theme from '../../commons/Theme';
 
 import { withStyles } from '@material-ui/core';
@@ -21,6 +22,7 @@ class App extends Component {
         return (
             <Provider store = { store }>
                 <ThemeProvider theme={theme}>
+                    <Modal /> 
                     <ToastContainer />
                     <GlobalLoading />
                     <Taskboard />

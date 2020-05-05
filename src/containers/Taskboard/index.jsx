@@ -10,8 +10,10 @@ import Grid from '@material-ui/core/Grid';
 
 import { STATUSES } from '../../constants';
 import TaskList from '../../components/TaskList';
-import TaskForm from '../../components/TaskForm';
+import TaskForm from '../TaskForm';
+
 import * as taskActions from '../../actions/tasks'
+import * as modalActions from '../../actions/modal'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -21,6 +23,12 @@ class TaskBoard extends Component {
 
     state = {
         open: false
+    };
+
+    componentDidMount() {
+        const { taskActionCreator } = this.props;
+        const { fetchListTask } = taskActionCreator;
+        fetchListTask();
     };
 
     renderBoard = () => {
@@ -51,9 +59,12 @@ class TaskBoard extends Component {
     };
 
     openForm = () => {
-        this.setState({
-            open: true
-        });
+        const { modalActionCreators } = this.props;
+        const { showModal, changeModalContent, changeModalTitle }  = modalActionCreators;
+
+        showModal();
+        changeModalTitle('add new work');
+        changeModalContent(<TaskForm />);
     };
 
     renderForm = () => {
@@ -118,10 +129,19 @@ class TaskBoard extends Component {
 
 TaskBoard.propTypes = {
     classes: PropTypes.object,
+
     taskActionCreator: PropTypes.shape({
         fetchListTask: PropTypes.func,
         filterTask: PropTypes.func,
     }),
+
+    modalActionCreator: PropTypes.shape({
+        showModal: PropTypes.func,
+        hideModal: PropTypes.func,
+        changeModalTitle: PropTypes.func,
+        changeModalContent: PropTypes.func,
+    }),
+
     listTask: PropTypes.array
 }
 
@@ -132,7 +152,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        taskActionCreator: bindActionCreators(taskActions, dispatch)
+        taskActionCreator: bindActionCreators(taskActions, dispatch),
+        modalActionCreators: bindActionCreators(modalActions, dispatch),
     }
 }
 
